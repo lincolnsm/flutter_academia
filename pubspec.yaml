@@ -1,0 +1,66 @@
+name: flutter_academia
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  firebase_core: ^4.1.1
+  cloud_firestore: ^6.0.2
+  firebase_auth: ^6.1.0
+
+  url_launcher: ^6.3.2
+  provider: ^6.1.2
+  dartz: ^0.10.1
+  youtube_player_iframe: ^5.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/halter.png
+    - assets/images/logo_principal.png
+    - assets/images/academia_logo.png
+    - assets/images/casa_logo.png
+    - assets/images/imagem_treino_1.png
+    - assets/images/imagem_treino_2.png
+    - assets/images/imagem_treino_3.png
+    - assets/images/treino_iniciante.png
+    - assets/images/treino_intermediario.png
+    - assets/images/treino_avancado.png
+    - assets/images/supino_inclinado.png
+    - assets/images/crossover-polia-alta.png
+    - assets/images/supino-reto-barra.png
+    - assets/images/crossover-polia-alta.png
+    - assets/images/flexao.png
+    - assets/images/crucifixo-inclinado-halteres.png
+    - assets/images/barra-fixa.png
+    - assets/images/remada-curvada-barra.png
+    - assets/images/remada-unilateral-halter.png
+    - assets/images/pulldown-polia-alta.png
+    - assets/images/facepull.png
+    - assets/images/elevacao-lateral.png
+    - assets/images/elevacao-frontal.png
+    - assets/images/encolhimento.png
+    - assets/images/arnald-press.png
+    - assets/images/desenvolvimento-com-halteres.png
+    - assets/images/agachamento-livre.png
+    - assets/images/legpress.png
+    - assets/images/cadeira-extensora.png
+    - assets/images/cadeira-flexora.png
+    - assets/images/panturrilha.png
+    - assets/images/rosca_direta.png
+    - assets/images/rosca_alternada.png
+    - assets/images/triceps_testa.png
+    - assets/images/triceps_corda.png
+    - assets/images/rosca_martelo.png
