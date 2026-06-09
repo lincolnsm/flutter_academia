@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'funcionalidades/usuario/apresentacao/controladores/cadastro_controlador.dart';
 import 'funcionalidades/usuario/apresentacao/controladores/login_controlador.dart';
+import 'funcionalidades/treino/apresentacao/controladores/treino_personalizado_controlador.dart';
 import 'funcionalidades/usuario/apresentacao/paginas/cadastro_pagina.dart';
 import 'funcionalidades/usuario/apresentacao/paginas/inicial_pagina.dart';
 import 'funcionalidades/usuario/apresentacao/paginas/escolha_nivel_pagina.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CadastroControlador()),
         ChangeNotifierProvider(create: (_) => LoginControlador()),
+        ChangeNotifierProvider(create: (_) => TreinoPersonalizadoControlador()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,7 +61,9 @@ class MyApp extends StatelessWidget {
                 titulo: args['titulo'] ?? 'Exercício',
                 subtitulo: args['subtitulo'] ?? '',
                 urlVideo: args['urlVideo'] ?? '',
-                imagem: '',
+                imagem: args['imagem'] ?? '',
+                reps: args['reps'],
+                descricao: args['descricao'],
               ),
             );
           }

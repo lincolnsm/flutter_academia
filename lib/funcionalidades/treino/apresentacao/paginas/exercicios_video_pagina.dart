@@ -7,6 +7,8 @@ class ExercicioVideoPagina extends StatefulWidget {
   final String subtitulo;
   final String urlVideo;
   final String imagem;
+  final String? reps;
+  final String? descricao;
 
   const ExercicioVideoPagina({
     super.key,
@@ -14,6 +16,8 @@ class ExercicioVideoPagina extends StatefulWidget {
     required this.subtitulo,
     required this.urlVideo,
     required this.imagem,
+    this.reps,
+    this.descricao,
   });
 
   @override
@@ -77,23 +81,95 @@ class _ExercicioVideoPaginaState extends State<ExercicioVideoPagina> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              widget.titulo,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.titulo,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (widget.reps != null) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFA8D5BA).withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.repeat,
+                              size: 14, color: Color(0xFFA8D5BA)),
+                          const SizedBox(width: 6),
+                          Text(
+                            widget.reps!,
+                            style: const TextStyle(
+                              color: Color(0xFFA8D5BA),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (widget.descricao != null &&
+                      widget.descricao!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(14),
+                        border:
+                            Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.info_outline,
+                                  size: 14, color: Colors.white38),
+                              SizedBox(width: 6),
+                              Text(
+                                'Execução',
+                                style: TextStyle(
+                                  color: Colors.white38,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            widget.descricao!,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                              height: 1.6,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            Text(
-              widget.subtitulo,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
           ],
         ),
       ),
