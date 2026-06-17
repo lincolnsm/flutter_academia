@@ -17,6 +17,7 @@ class ExerciciosListaPagina extends StatefulWidget {
   State<ExerciciosListaPagina> createState() => _ExerciciosListaPaginaState();
 }
 
+// Extrai a quantidade de séries do campo reps. Ex: "3 x 12" → 3, "4 x 8-10" → 4.
 int _parseSeries(String reps) {
   final m = RegExp(r'^\s*(\d+)').firstMatch(reps);
   if (m != null) {
@@ -29,6 +30,7 @@ int _parseSeries(String reps) {
 class _ExerciciosListaPaginaState extends State<ExerciciosListaPagina> {
   final Map<int, int> _seriesFeitas = {};
 
+  // Monta a lista de exercícios: usa widget.exercicios se fornecida, senão filtra pelo banco.
   List<Exercicio> _buildLista() {
     final routeArgs = ModalRoute.of(context)?.settings.arguments;
     String nivel = '';
@@ -45,15 +47,17 @@ class _ExerciciosListaPaginaState extends State<ExerciciosListaPagina> {
               (treino.isEmpty || tagsLower.contains(treino));
         }).toList();
 
+    // Dedup por nome+imagem (mesmo exercício pode aparecer em múltiplos níveis no banco).
     final seen = <String>{};
     final lista = <Exercicio>[];
     for (final ex in listaBase) {
       final key = '${ex.nome.trim().toLowerCase()}_${ex.imagem}';
       if (seen.add(key)) lista.add(ex);
     }
-    return lista.take(8).toList();
+    return lista.take(8).toList(); // máx 8 exercícios por sessão
   }
 
+  // Registra uma série e abre o timer de descanso. totalSeries vem de _parseSeries().
   void _concluirSerie(int index, int totalSeries) {
     final atual = _seriesFeitas[index] ?? 0;
     if (atual < totalSeries) {

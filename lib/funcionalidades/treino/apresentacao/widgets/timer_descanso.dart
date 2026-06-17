@@ -161,6 +161,7 @@ class _TimerDescansoSheetState extends State<_TimerDescansoSheet> {
               style: TextStyle(color: Colors.white38, fontSize: 11, letterSpacing: 1),
             ),
             const SizedBox(height: 12),
+            // Labels: "30s" / "1min" / "1:30" — s%60==0 usa "min", senão usa "min:seg".
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [30, 60, 90, 120, 180].map((s) {

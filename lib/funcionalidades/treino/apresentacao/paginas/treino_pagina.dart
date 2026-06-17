@@ -20,6 +20,7 @@ class _TreinoPaginaState extends State<TreinoPagina>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // Número de treinos pré-definidos por nível (iniciante=3, intermediário=4, avançado=5).
   static const Map<String, int> _quantidadePorNivel = {
     'iniciante': 3,
     'intermediario': 4,
@@ -41,6 +42,7 @@ class _TreinoPaginaState extends State<TreinoPagina>
     super.dispose();
   }
 
+  // Gera os treinos pré-definidos usando listas curadas por nível (não tags).
   List<Treino> _gerarTreinos() {
     final nivelNormalizado = widget.nivel.trim().toLowerCase();
     final int quantidade = _quantidadePorNivel[nivelNormalizado] ?? 3;
@@ -58,9 +60,10 @@ class _TreinoPaginaState extends State<TreinoPagina>
 
     for (var i = 0; i < quantidade; i++) {
       final conf = configuracoes[i];
+
       final nomesCurados = gruposDoNivel[conf['key']!] ?? [];
 
-      // For each curated name, prefer the nivel-specific entry; fall back to any level.
+      // Para cada nome curado, prefere a versão do nível do usuário; fallback para qualquer nível.
       final nomeToEx = <String, Exercicio>{};
       for (final ex in exercicios) {
         final nomeLower = ex.nome.trim().toLowerCase();
@@ -170,6 +173,7 @@ class _TabPreDefinido extends StatelessWidget {
   final String nivel;
   const _TabPreDefinido({required this.treinos, required this.nivel});
 
+  // Labels dos grupos musculares por treino — variam por nível pois C e D mudam de significado.
   Map<String, String> get _grupos {
     final n = nivel.trim().toLowerCase();
     if (n == 'avancado') {
@@ -188,6 +192,7 @@ class _TabPreDefinido extends StatelessWidget {
         'Treino C': 'Pernas • Ombros',
       };
     }
+    // intermediario
     return const {
       'Treino A': 'Peito • Tríceps',
       'Treino B': 'Costas • Bíceps',
@@ -479,8 +484,7 @@ class _CriarTreinoPrompt extends StatelessWidget {
   }
 }
 
-// Curated exercise lists for pre-defined workouts — bypasses the level-shifted tag system.
-// Order determines display order; nivel-specific reps are preferred at runtime.
+// Exercícios curados por nível e treino. Substituem o filtro por tags que tinha contaminação cruzada.
 const Map<String, Map<String, List<String>>> _kExerciciosPreDefinido = {
   'iniciante': {
     'treinoa': [
@@ -543,8 +547,7 @@ const Map<String, Map<String, List<String>>> _kExerciciosPreDefinido = {
   },
 };
 
-// Canonical exercise names per muscle group, ordered compounds-first.
-// Name-based lookup ensures no cross-contamination from the level-shifted tag system.
+// Nomes canônicos por grupo muscular (compostos primeiro). Base do treino personalizado.
 const Map<String, List<String>> _kNomesGrupo = {
   'peito': [
     'supino reto barra',
@@ -608,6 +611,7 @@ const Map<String, List<String>> _kNomesGrupo = {
   ],
 };
 
+// Retorna até 8 exercícios para um grupo muscular (pré-seleção padrão do treino personalizado).
 List<Exercicio> _exerciciosParaGrupo(GrupoMuscular grupo) {
   final List<String> nomes;
   if (_kNomesGrupo.containsKey(grupo.id)) {
@@ -634,18 +638,17 @@ List<Exercicio> _exerciciosParaGrupo(GrupoMuscular grupo) {
 
   final nomesLower = nomes.map((n) => n.toLowerCase()).toList();
   final nomesSet = nomesLower.toSet();
-
   final found = exercicios
       .where((e) => nomesSet.contains(e.nome.trim().toLowerCase()))
       .toList();
 
-  // Dedup by name only — level variants (iniciante/intermediario/avancado) are the same exercise
+  // Dedup por nome (o mesmo exercício existe em múltiplos níveis no banco).
   final seen = <String>{};
   final deduped = found
       .where((e) => seen.add(e.nome.trim().toLowerCase()))
       .toList();
 
-  // Restore intended display order (compounds first)
+  // Restaura a ordem definida em _kNomesGrupo (compostos primeiro).
   deduped.sort((a, b) {
     final ia = nomesLower.indexOf(a.nome.trim().toLowerCase());
     final ib = nomesLower.indexOf(b.nome.trim().toLowerCase());
@@ -655,8 +658,7 @@ List<Exercicio> _exerciciosParaGrupo(GrupoMuscular grupo) {
   return deduped.take(8).toList();
 }
 
-// All registered exercises grouped by section for the edit sheet.
-// Exercises that appear in multiple groups are deduplicated (first group wins).
+// Todos os exercícios agrupados por seção muscular para o sheet de edição.
 List<MapEntry<String, List<Exercicio>>> _exerciciosPorSecao() {
   final ordemSecoes = [
     MapEntry('Peito & Tríceps', 'peito'),
@@ -665,8 +667,10 @@ List<MapEntry<String, List<Exercicio>>> _exerciciosPorSecao() {
     MapEntry('Ombros', 'ombros'),
     MapEntry('Braços', 'bracos'),
   ];
+
   final seen = <String>{};
   final result = <MapEntry<String, List<Exercicio>>>[];
+
   for (final entry in ordemSecoes) {
     final grupo = GrupoMuscular.porId(entry.value);
     if (grupo == null) continue;
@@ -678,7 +682,7 @@ List<MapEntry<String, List<Exercicio>>> _exerciciosPorSecao() {
   return result;
 }
 
-// Returns all available exercises for a group (no cap) — used for the edit sheet.
+// Igual a _exerciciosParaGrupo, sem o limite de 8.
 List<Exercicio> _todosExerciciosParaGrupo(GrupoMuscular grupo) {
   final List<String> nomes;
   if (_kNomesGrupo.containsKey(grupo.id)) {
@@ -730,6 +734,7 @@ class _TreinoPersonalizadoView extends StatelessWidget {
     required this.onExcluir,
   });
 
+  // Abre o sheet com todos os exercícios; pré-seleciona os do grupo do dia.
   void _abrirEdicaoExercicios(
       BuildContext context, DiaPersonalizado dia, int diaIndex) {
     final secoes = _exerciciosPorSecao();
@@ -947,7 +952,7 @@ class _EditarExerciciosSheetState extends State<_EditarExerciciosSheet> {
   late Set<String> _selecionados;
   bool _salvando = false;
 
-  // Flat list of items: String = section header, Exercicio = exercise row
+  // Lista plana intercalando String (cabeçalho de seção) e Exercicio (linha com checkbox).
   late final List<Object> _itens;
 
   @override
@@ -1028,7 +1033,7 @@ class _EditarExerciciosSheetState extends State<_EditarExerciciosSheet> {
               itemBuilder: (context, i) {
                 final item = _itens[i];
 
-                if (item is String) {
+                if (item is String) { // cabeçalho de seção
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
                     child: Text(
