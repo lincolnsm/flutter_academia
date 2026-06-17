@@ -655,6 +655,29 @@ List<Exercicio> _exerciciosParaGrupo(GrupoMuscular grupo) {
   return deduped.take(8).toList();
 }
 
+// All registered exercises grouped by section for the edit sheet.
+// Exercises that appear in multiple groups are deduplicated (first group wins).
+List<MapEntry<String, List<Exercicio>>> _exerciciosPorSecao() {
+  final ordemSecoes = [
+    MapEntry('Peito & Tríceps', 'peito'),
+    MapEntry('Costas & Bíceps', 'costas'),
+    MapEntry('Pernas', 'pernas'),
+    MapEntry('Ombros', 'ombros'),
+    MapEntry('Braços', 'bracos'),
+  ];
+  final seen = <String>{};
+  final result = <MapEntry<String, List<Exercicio>>>[];
+  for (final entry in ordemSecoes) {
+    final grupo = GrupoMuscular.porId(entry.value);
+    if (grupo == null) continue;
+    final exs = _todosExerciciosParaGrupo(grupo)
+        .where((ex) => seen.add(ex.nome.trim().toLowerCase()))
+        .toList();
+    if (exs.isNotEmpty) result.add(MapEntry(entry.key, exs));
+  }
+  return result;
+}
+
 // Returns all available exercises for a group (no cap) — used for the edit sheet.
 List<Exercicio> _todosExerciciosParaGrupo(GrupoMuscular grupo) {
   final List<String> nomes;
@@ -709,8 +732,8 @@ class _TreinoPersonalizadoView extends StatelessWidget {
 
   void _abrirEdicaoExercicios(
       BuildContext context, DiaPersonalizado dia, int diaIndex) {
-    // Full list shown in the sheet; default selection = capped 8 workout exercises.
-    final todos = _todosExerciciosParaGrupo(dia.grupo);
+    final secoes = _exerciciosPorSecao();
+    final todos = secoes.expand((s) => s.value).toList();
     final iniciais = dia.exerciciosSelecionados.isEmpty
         ? _exerciciosParaGrupo(dia.grupo).map((e) => e.nome).toSet()
         : Set<String>.from(dia.exerciciosSelecionados);
@@ -722,6 +745,7 @@ class _TreinoPersonalizadoView extends StatelessWidget {
       builder: (_) => _EditarExerciciosSheet(
         dia: dia,
         todosExercicios: todos,
+        secoes: secoes,
         selecionadosIniciais: iniciais,
         onSalvar: (novos) async {
           final ctrl = context.read<TreinoPersonalizadoControlador>();
@@ -902,12 +926,14 @@ class _TreinoPersonalizadoView extends StatelessWidget {
 class _EditarExerciciosSheet extends StatefulWidget {
   final DiaPersonalizado dia;
   final List<Exercicio> todosExercicios;
+  final List<MapEntry<String, List<Exercicio>>> secoes;
   final Set<String> selecionadosIniciais;
   final Future<void> Function(Set<String>) onSalvar;
 
   const _EditarExerciciosSheet({
     required this.dia,
     required this.todosExercicios,
+    required this.secoes,
     required this.selecionadosIniciais,
     required this.onSalvar,
   });
@@ -921,10 +947,16 @@ class _EditarExerciciosSheetState extends State<_EditarExerciciosSheet> {
   late Set<String> _selecionados;
   bool _salvando = false;
 
+  // Flat list of items: String = section header, Exercicio = exercise row
+  late final List<Object> _itens;
+
   @override
   void initState() {
     super.initState();
     _selecionados = Set<String>.from(widget.selecionadosIniciais);
+    _itens = [
+      for (final secao in widget.secoes) ...[secao.key, ...secao.value],
+    ];
   }
 
   @override
@@ -981,7 +1013,7 @@ class _EditarExerciciosSheetState extends State<_EditarExerciciosSheet> {
                   ),
                 ),
                 Text(
-                  '${_selecionados.length}/${widget.todosExercicios.length}',
+                  '${_selecionados.length} selecionados',
                   style:
                       const TextStyle(color: Colors.white38, fontSize: 13),
                 ),
@@ -992,9 +1024,26 @@ class _EditarExerciciosSheetState extends State<_EditarExerciciosSheet> {
           Flexible(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: widget.todosExercicios.length,
+              itemCount: _itens.length,
               itemBuilder: (context, i) {
-                final ex = widget.todosExercicios[i];
+                final item = _itens[i];
+
+                if (item is String) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        color: Color(0xFFA8D5BA),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  );
+                }
+
+                final ex = item as Exercicio;
                 final sel = _selecionados.contains(ex.nome);
                 return CheckboxListTile(
                   value: sel,
