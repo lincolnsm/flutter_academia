@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../dominio/entidades/exercicios.dart';
 import '../../dados/repositorios/exercicios_data.dart';
-import '../../../usuario/widgets/painel_usuario.dart';
+import '../../../usuario/apresentacao/widgets/painel_usuario.dart';
 import '../widgets/timer_descanso.dart';
 
 class ExerciciosListaPagina extends StatefulWidget {

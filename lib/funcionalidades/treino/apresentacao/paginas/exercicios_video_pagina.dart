@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import '../../../usuario/widgets/painel_usuario.dart';
+import '../../../usuario/apresentacao/widgets/painel_usuario.dart';
 
 class ExercicioVideoPagina extends StatefulWidget {
   final String titulo;

@@ -5,7 +5,7 @@ import '../../dominio/entidades/exercicios.dart';
 import '../../dominio/entidades/treino_personalizado.dart';
 import '../../dados/repositorios/exercicios_data.dart';
 import '../controladores/treino_personalizado_controlador.dart';
-import '../../../usuario/widgets/painel_usuario.dart';
+import '../../../usuario/apresentacao/widgets/painel_usuario.dart';
 import 'treino_personalizado_pagina.dart';
 
 class TreinoPagina extends StatefulWidget {
@@ -30,7 +30,7 @@ class _TreinoPaginaState extends State<TreinoPagina>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<TreinoPersonalizadoControlador>().carregar();
     });
@@ -132,6 +132,7 @@ class _TreinoPaginaState extends State<TreinoPagina>
               const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           tabs: const [
             Tab(text: 'Pré-definido'),
+            Tab(text: 'Em Casa'),
             Tab(text: 'Personalizado'),
           ],
         ),
@@ -140,6 +141,7 @@ class _TreinoPaginaState extends State<TreinoPagina>
         controller: _tabController,
         children: [
           _TabPreDefinido(treinos: treinos, nivel: widget.nivel),
+          const _TabEmCasa(),
           _TabPersonalizado(nivel: widget.nivel),
         ],
       ),
@@ -351,6 +353,86 @@ class _CardTreino extends StatelessWidget {
   }
 }
 
+class _TabEmCasa extends StatelessWidget {
+  const _TabEmCasa();
+
+  static const _categorias = [
+    {
+      'id': 'corpo_completo',
+      'titulo': 'Corpo Completo',
+      'subtitulo': 'Treino funcional sem equipamento',
+      'gradiente': [Color(0xFF4A7B70), Color(0xFF2A4A45)],
+    },
+    {
+      'id': 'superior',
+      'titulo': 'Superior',
+      'subtitulo': 'Peito, Ombros & Tríceps',
+      'gradiente': [Color(0xFF3E6B5E), Color(0xFF1F3832)],
+    },
+    {
+      'id': 'inferior',
+      'titulo': 'Inferior',
+      'subtitulo': 'Pernas & Glúteos',
+      'gradiente': [Color(0xFF547A6D), Color(0xFF2E4D47)],
+    },
+    {
+      'id': 'core',
+      'titulo': 'Core',
+      'subtitulo': 'Abdômen & Estabilidade',
+      'gradiente': [Color(0xFF4A7B70), Color(0xFF2A4A45)],
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.home_outlined, color: Color(0xFFA8D5BA), size: 18),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Text(
+                  'Exercícios de peso corporal — sem equipamento',
+                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ),
+        for (final cat in _categorias)
+          Builder(builder: (context) {
+            final exs = _exerciciosEmCasaPorCategoria(cat['id'] as String);
+            final treino = Treino(
+              titulo: cat['titulo'] as String,
+              botaoEscuro: false,
+              exercicios: exs,
+            );
+            return _CardTreino(
+              treino: treino,
+              gradiente: cat['gradiente'] as List<Color>,
+              grupo: cat['subtitulo'] as String,
+              onPressed: () => Navigator.pushNamed(
+                context,
+                '/treino/exercicios',
+                arguments: treino,
+              ),
+            );
+          }),
+      ],
+    );
+  }
+}
+
 class _TabPersonalizado extends StatelessWidget {
   final String nivel;
   const _TabPersonalizado({required this.nivel});
@@ -482,6 +564,40 @@ class _CriarTreinoPrompt extends StatelessWidget {
       ),
     );
   }
+}
+
+// Exercícios de cada categoria do treino em casa.
+const Map<String, List<String>> _kNomesEmCasa = {
+  'corpo_completo': [
+    'flexão de braço', 'afundo alternado', 'burpee',
+    'prancha', 'elevação de quadril', 'mountain climber', 'crunch abdominal',
+  ],
+  'superior': [
+    'flexão de braço', 'flexão diamante', 'pike push-up', 'dips na cadeira', 'superman',
+  ],
+  'inferior': [
+    'afundo alternado', 'elevação de quadril',
+    'panturrilha em pé', 'elevação de pernas',
+  ],
+  'core': [
+    'prancha', 'crunch abdominal', 'mountain climber', 'prancha lateral', 'elevação de pernas',
+  ],
+};
+
+List<Exercicio> _exerciciosEmCasaPorCategoria(String categoriaId) {
+  final nomes = _kNomesEmCasa[categoriaId] ?? [];
+  final nomesSet = nomes.map((n) => n.toLowerCase()).toSet();
+  final found = exercicios
+      .where((e) => nomesSet.contains(e.nome.trim().toLowerCase()))
+      .toList();
+  final seen = <String>{};
+  final deduped = found.where((e) => seen.add(e.nome.trim().toLowerCase())).toList();
+  deduped.sort((a, b) {
+    final ia = nomes.indexOf(a.nome.trim().toLowerCase());
+    final ib = nomes.indexOf(b.nome.trim().toLowerCase());
+    return ia.compareTo(ib);
+  });
+  return deduped.take(8).toList();
 }
 
 // Exercícios curados por nível e treino. Substituem o filtro por tags que tinha contaminação cruzada.

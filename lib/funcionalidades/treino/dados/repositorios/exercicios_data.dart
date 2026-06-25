@@ -905,4 +905,126 @@ final List<Exercicio> exercicios = [
     descricao:
         "Isola a cabeça longa do tríceps com amplitude máxima. Segure o halter acima da cabeça, desça atrás controlando o peso. A cabeça longa só é recrutada em extensão completa.",
   ),
+
+  // ----- PESO CORPORAL / CASA -----
+  Exercicio(
+    nome: "Afundo Alternado",
+    imagem: "assets/images/afundo.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "YnYA-ughpNQ",
+    tags: ["casa"],
+    reps: "3 x 12 cada",
+    descricao:
+        "Dê um passo à frente e desça até o joelho traseiro quase tocar o chão. Alterne as pernas a cada repetição. Mantenha o tronco ereto e o joelho dianteiro alinhado ao pé.",
+  ),
+  Exercicio(
+    nome: "Prancha",
+    imagem: "assets/images/prancha.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "mwlp75MS6Rg",
+    tags: ["casa"],
+    reps: "3 x 45s",
+    descricao:
+        "Apoie nos antebraços e pontas dos pés. Corpo reto como uma tábua, abdômen contraído, quadril na linha do corpo. Respire normalmente e sustente o tempo indicado.",
+  ),
+  Exercicio(
+    nome: "Crunch Abdominal",
+    imagem: "assets/images/crunch.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "M6yAoJJQvGY",
+    tags: ["casa"],
+    reps: "3 x 20",
+    descricao:
+        "Deitado de costas, joelhos dobrados, mãos atrás da cabeça. Contraia o abdômen e eleve as escápulas do chão. Controle a descida sem apoiar totalmente entre as repetições.",
+  ),
+  Exercicio(
+    nome: "Burpee",
+    imagem: "assets/images/burpee.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "qLBImHhCXSw",
+    tags: ["casa"],
+    reps: "3 x 10",
+    descricao:
+        "Agache, apoie as mãos no chão, dê um pulo para a posição de flexão, faça uma flexão, volte os pés, agache e salte com os braços acima da cabeça. Exercício de alto gasto calórico.",
+  ),
+  Exercicio(
+    nome: "Elevação de Quadril",
+    imagem: "assets/images/hip_thrust.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "wPM8icPu6H8",
+    tags: ["casa"],
+    reps: "3 x 20",
+    descricao:
+        "Deitado, joelhos dobrados, pés apoiados no chão. Empurre o quadril para cima contraindo os glúteos no topo. Segure 1 segundo e desça controlado. Pode ser feito no chão ou com ombros no sofá.",
+  ),
+  Exercicio(
+    nome: "Mountain Climber",
+    imagem: "assets/images/mountain_climber.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "cnyTQDSE884",
+    tags: ["casa"],
+    reps: "3 x 30s",
+    descricao:
+        "Em posição de flexão, alterne trazendo os joelhos em direção ao peito rapidamente. Mantenha o quadril baixo e o core contraído. Exercício cardiovascular e de core ao mesmo tempo.",
+  ),
+  Exercicio(
+    nome: "Flexão Diamante",
+    imagem: "assets/images/flexao_diamante.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "8_ILkbB9an8",
+    tags: ["casa"],
+    reps: "3 x 10",
+    descricao:
+        "Flexão com as mãos próximas formando um triângulo (losango) com os dedos. Enfatiza o tríceps e a porção interna do peitoral. Movimento mais exigente que a flexão convencional.",
+  ),
+  Exercicio(
+    nome: "Dips na Cadeira",
+    imagem: "assets/images/dips_cadeira.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "AWz_7B1cch0",
+    tags: ["casa"],
+    reps: "3 x 12",
+    descricao:
+        "Apoie as mãos na borda de uma cadeira ou banco estável. Desça o corpo dobrando os cotovelos até 90° e empurre de volta. Trabalha tríceps e peitoral inferior sem nenhum equipamento.",
+  ),
+  Exercicio(
+    nome: "Pike Push-up",
+    imagem: "assets/images/pike_pushup.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "2b5t0Cu2nQI",
+    tags: ["casa"],
+    reps: "3 x 10",
+    descricao:
+        "Em posição de V invertido (quadril alto), dobre os cotovelos e desça a cabeça em direção ao chão. Trabalha principalmente os deltóides, simulando o desenvolvimento militar sem equipamento.",
+  ),
+  Exercicio(
+    nome: "Superman",
+    imagem: "assets/images/superman.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "UXUGfiNL1lI",
+    tags: ["casa"],
+    reps: "3 x 15",
+    descricao:
+        "Deitado de bruços, eleve simultaneamente braços e pernas do chão contraindo a lombar e glúteos. Segure 2 segundos no topo. Fortalece toda a cadeia posterior sem equipamento.",
+  ),
+  Exercicio(
+    nome: "Prancha Lateral",
+    imagem: "assets/images/prancha_lateral.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "44ND4bOB-T0",
+    tags: ["casa"],
+    reps: "3 x 30s cada",
+    descricao:
+        "Apoie no antebraço lateral e na lateral do pé. Eleve o quadril formando uma linha reta. Trabalha oblíquos e estabilizadores laterais do core. Repita nos dois lados.",
+  ),
+  Exercicio(
+    nome: "Elevação de Pernas",
+    imagem: "assets/images/elevacao_pernas.jpg",
+    tipoEquipamento: "peso_corporal",
+    linkYoutube: "Wp4BlxcFTkE",
+    tags: ["casa"],
+    reps: "3 x 15",
+    descricao:
+        "Deitado, pernas juntas e estendidas. Eleve-as até 90° contraindo o abdômen inferior. Desça sem deixar tocar o chão. Foca no reto abdominal inferior, geralmente negligenciado.",
+  ),
 ];
